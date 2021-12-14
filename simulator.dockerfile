@@ -13,5 +13,6 @@ RUN apt-get install -y software-properties-common && \
     pip install keras==2.1 && \
     pip install networkx && \
     pip install pandas && \
-    pip install matplotlib
+    pip install matplotlib && \
+    pip install jpype1
 

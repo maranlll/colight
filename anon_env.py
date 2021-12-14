@@ -1,14 +1,15 @@
 '''
 Interactions with CityFlow, get/set values from CityFlow, pass it to RL agents
 '''
-
+from jpype import *
+import jpype
 import pickle
 import numpy as np
 import json
 import sys
 import pandas as pd
 import os
-import cityflow as engine
+# import cityflow as engine
 import time
 import threading
 from multiprocessing import Process, Pool
@@ -812,7 +813,12 @@ class AnonEnv:
 
         with open(os.path.join(self.path_to_work_directory,"cityflow.config"), "w") as json_file:
             json.dump(cityflow_config, json_file)
-        self.eng = engine.Engine(os.path.join(self.path_to_work_directory,"cityflow.config"), thread_num=1)
+        jvmPath = jpype.getDefaultJVMPath()
+        jarpath = "./SEUCityflow-0.4.0.jar"
+        dependency = "./lib"
+        jpype.startJVM(jvmPath, "-Djava.class.path=%s" % jarpath, "-Djava.ext.dirs=%s" % dependency)
+        Engine = jpype.JClass('engine')
+        self.eng = Engine(os.path.join(self.path_to_work_directory,"cityflow.config"), thread_num=1)
         # self.load_roadnet()
         # self.load_flow()
 
